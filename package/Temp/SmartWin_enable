@@ -1,0 +1,7 @@
+IF EXISTS SYSTEMDIR:Storage/Startup/SmartWin
+  Copy SYSTEMDIR:Storage/Startup/SmartWin SYSTEMDIR:WBStartup
+  Copy SYSTEMDIR:Storage/Startup/SmartWin.info SYSTEMDIR:WBStartup
+  Delete >NIL: SYSTEMDIR:Storage/Startup/SmartWin
+  Delete >NIL: SYSTEMDIR:Storage/Startup/SmartWin.info
+ELSE
+EndIF

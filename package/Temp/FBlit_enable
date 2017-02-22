@@ -1,0 +1,9 @@
+IF EXISTS SYSTEMDIR:System/FBlit/FBlit_disabled
+  Rename SYSTEMDIR:System/FBlit/FBlit_disabled SYSTEMDIR:System/FBlit/FBlit
+  Copy SYSTEMDIR:Prefs/Env-Archive/Newicons.prefs SYSTEMDIR:Prefs/Presets/Newicons.prefs
+  Copy SYSTEMDIR:Prefs/Presets/NewiconsRTG.prefs SYSTEMDIR:Prefs/Env-Archive/Newicons.prefs
+  IF EXISTS SYSTEMDIR:System/FBlit/FBlit.cfg
+    Copy SYSTEMDIR:System/FBlit/FBlit.cfg SYSTEMDIR:Prefs/Env-Archive/FBlit.cfg
+  EndIF
+ELSE
+EndIF

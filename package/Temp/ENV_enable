@@ -1,0 +1,4 @@
+IF EXISTS SYSTEMDIR:L/env-handler_disabled
+  Rename SYSTEMDIR:L/env-handler_disabled SYSTEMDIR:L/env-handler
+ELSE
+EndIF
