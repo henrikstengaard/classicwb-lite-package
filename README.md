@@ -19,4 +19,4 @@ The install script for HstWB Installer is based on S/Startup-Sequence from Class
 
 ## Installation
 
-Download latest release [here](../releases) and copy it to HstWB Installer "packages" directory, which typically is "c:\Program Files (x86)\HstWB Installer\Packages".
+Download latest release [here](../../releases) and copy it to HstWB Installer "packages" directory, which typically is "c:\Program Files (x86)\HstWB Installer\Packages".
