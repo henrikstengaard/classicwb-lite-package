@@ -2,10 +2,10 @@
 ; -----------------------------------------
 ;
 ; Author: Henrik Noerfjand Stengaard 
-; Date: 2017-02-22
+; Date: 2017-02-28
 ;
 ; This script extracts and installs ClassicWB Lite v28 created by Bloodwych from EAB. 
-; By permission from Bloodwych it's been converted to a package for HstWB Installer.
+; With permission from Bloodwych it's been converted to a package for HstWB Installer.
 ; The install script is based on S/Startup-Sequence from System.hdf with following changes:
 ; - Removed Workbench installation.
 ; - Paths has been changed: SYS: to SYSTEMDIR:, C: to SYSTEMDIR:C/, L: to SYSTEMDIR:L/.
@@ -757,5 +757,5 @@ echo "Also check out the Settings->Components menu to access"
 echo "more options like BlazeWPC, IconBeFast, TagLiFE, PatchRAM"
 echo "HardDrive ENV and TinyMeter."
 echo ""
-ask "Press RETURN to choose."
+ask "Press RETURN to continue."
 cls

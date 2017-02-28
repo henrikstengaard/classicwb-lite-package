@@ -4,7 +4,7 @@
 
 ClassicWB LITE Package contains ClassicWB Lite v28 created by Bloodwych from EAB.
 
-By permission from Bloodwych it's been converted to a package for HstWB Installer.
+With permission from Bloodwych it's been converted to a package for HstWB Installer.
 
 ClassicWB is installed from a zip file containing all files from ClassicWB System.hdf.
 
