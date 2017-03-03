@@ -1,11 +1,12 @@
-; ClassicWB Lite v28 Package Install Script
+; ClassicWB LITE v28 Package Install Script
 ; -----------------------------------------
 ;
 ; Author: Henrik Noerfjand Stengaard 
-; Date: 2017-02-28
+; Date: 2017-03-03
 ;
-; This script extracts and installs ClassicWB Lite v28 created by Bloodwych from EAB. 
+; This script extracts and installs ClassicWB LITE v28 created by Bloodwych from EAB. 
 ; With permission from Bloodwych it's been converted to a package for HstWB Installer.
+; Original version of ClassicWB LITE can be downloaded from http://classicwb.abime.net/.
 ; The install script is based on S/Startup-Sequence from System.hdf with following changes:
 ; - Removed Workbench installation.
 ; - Paths has been changed: SYS: to SYSTEMDIR:, C: to SYSTEMDIR:C/, L: to SYSTEMDIR:L/.
@@ -16,17 +17,19 @@
 
 
 ; Extract classicwb lite v28 zip to systemdir
-echo "Installing ClassicWB Lite v28..." 
+echo "Installing ClassicWB LITE..." 
 unzip -qq -o -x PACKAGEDIR:classicwb_lite_v28.zip -d SYSTEMDIR:
 
-; ClassicWB installation from S/Startup-Sequence
+; Install ClassicWB from S/Startup-Sequence
+; LITE
 copy SYSTEMDIR:T/Science SYSTEMDIR:S CLONE
 delete >NIL: SYSTEMDIR:T/Science
 delete >NIL: SYSTEMDIR:S/startup-sequence
 rename SYSTEMDIR:S/Science SYSTEMDIR:S/Startup-Sequence
 
 IF EXISTS SYSTEMDIR:C/LoadWB.temp
-  rename SYSTEMDIR:C/LoadWB.temp SYSTEMDIR:C/LoadWB
+  copy >NIL: SYSTEMDIR:C/LoadWB.temp SYSTEMDIR:C/LoadWB
+  delete >NIL: SYSTEMDIR:C/LoadWB.temp
 ENDIF
 
 delete >NIL: SYSTEMDIR:S/Workbench3.1
@@ -42,9 +45,9 @@ IF EXISTS SYSTEMDIR:T/zz
   delete >NIL: SYSTEMDIR:T/zz
 EndIF
 
-copy SYSTEMDIR:System/IconLib/S/Startup-Sequence30 SYSTEMDIR:System/IconLib/S/Startup-Sequence CLONE
-
-wait 2
+IF EXISTS SYSTEMDIR:System/IconLib/S/Startup-Sequence30
+  copy SYSTEMDIR:System/IconLib/S/Startup-Sequence30 SYSTEMDIR:System/IconLib/S/Startup-Sequence CLONE
+ENDIF
 
 LAB OPTIONS
 
@@ -108,7 +111,7 @@ LAB WB13
   delete >NIL: SYSTEMDIR:Temp/regen.zip
   delete >NIL: SYSTEMDIR:Temp/oldicons.zip
   delete >NIL: SYSTEMDIR:Temp/oldiconsd.zip
-  wait 2
+  wait 1
 
 LAB PALETTE
 
@@ -166,7 +169,7 @@ LAB LIMITED
   echo "8 colour Palette installed."
   echo ""
   delete >NIL: SYSTEMDIR:Temp/palette.zip
-  wait 2
+  wait 1
 
 LAB THEME
 
@@ -230,7 +233,7 @@ LAB RETRO
   delete >NIL: SYSTEMDIR:Temp/regen.zip
   delete >NIL: SYSTEMDIR:Temp/oldicons.zip
   delete >NIL: SYSTEMDIR:Temp/oldiconsd.zip
-  wait 2
+  wait 1
   SKIP COPPER
 
 LAB REGEN
@@ -247,7 +250,7 @@ LAB REGEN
   delete >NIL: SYSTEMDIR:Temp/regen.zip
   delete >NIL: SYSTEMDIR:Temp/oldicons.zip
   delete >NIL: SYSTEMDIR:Temp/oldiconsd.zip
-  wait 2
+  wait 1
   SKIP COPPER
 
 LAB OLDICONS
@@ -294,7 +297,7 @@ LAB ENABLE
   echo ""
   delete >NIL: SYSTEMDIR:Temp/oldicons.zip
   delete >NIL: SYSTEMDIR:Temp/oldiconsd.zip
-  wait 2
+  wait 1
   SKIP COPPER
 
 LAB DISABLE
@@ -355,7 +358,7 @@ LAB ENABLE
   echo ""
   delete >NIL: SYSTEMDIR:Temp/Copper_enable
   delete >NIL: SYSTEMDIR:Temp/BorderBlank_enable
-  wait 2
+  wait 1
   SKIP BORDER
 
 LAB DISABLE
@@ -404,7 +407,7 @@ LAB ENABLE
   echo "Black Border support installed."
   echo ""
   delete >NIL: SYSTEMDIR:Temp/BorderBlank_enable
-  wait 2
+  wait 1
   SKIP FBLIT
 
 LAB DISABLE
@@ -458,7 +461,7 @@ LAB ENABLE
   echo "FBlit and FText support installed."
   echo ""
   delete >NIL: SYSTEMDIR:Temp/FBlit_enable
-  wait 2
+  wait 1
   SKIP STACK
 
 LAB DISABLE
@@ -512,7 +515,7 @@ LAB ENABLE
   echo "StackAttack support installed."
   echo ""
   delete >NIL: SYSTEMDIR:Temp/StackAttack_enable
-  wait 2
+  wait 1
   SKIP HDENV
 
 LAB DISABLE
@@ -567,7 +570,7 @@ LAB ENABLE
   echo "Hard Drive ENV support installed."
   echo ""
   delete >NIL: SYSTEMDIR:Temp/ENV_enable
-  wait 2
+  wait 1
   SKIP ANTICLICK
 
 LAB DISABLE
@@ -626,7 +629,7 @@ LAB DISABLE
   echo "AntiClick support removed."
   echo ""
   delete >NIL: SYSTEMDIR:Temp/AntiClick_disable
-  wait 2
+  wait 1
 
 LAB FREEWHEEL
 
@@ -680,7 +683,7 @@ LAB DISABLE
   echo "FreeWheel support removed."
   echo ""
   delete >NIL: SYSTEMDIR:Temp/FreeWheel_disable
-  wait 2
+  wait 1
 
 LAB SMARTWIN
 
@@ -731,7 +734,7 @@ LAB ENABLE
   echo "SmartWin support installed."
   echo ""
   delete >NIL: SYSTEMDIR:Temp/SmartWin_enable
-  wait 2
+  wait 1
   SKIP END
 
 LAB DISABLE
@@ -740,7 +743,6 @@ LAB DISABLE
 
 LAB END
 
-wait 2
 cls
 
 echo ""
