@@ -4,7 +4,7 @@
 
 ClassicWB LITE Package contains ClassicWB LITE v28 created by Bloodwych from EAB. 
 
-ClassicWB LITE is feature rich Workbench enhancement by Bloodwych targeted A1200 using 4/8/16 colour screenmode using PAL / NTSC / Non-Interlaced 640x256 display.
+ClassicWB LITE is a feature rich Workbench enhancement by Bloodwych targeted A1200 using 4/8/16 colour screenmode using PAL / NTSC / Non-Interlaced 640x256 display.
 
 With permission from Bloodwych it's been converted to a package for HstWB Installer.
 
