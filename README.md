@@ -2,9 +2,17 @@
 
 ## Description
 
-ClassicWB LITE Package contains ClassicWB Lite v28 created by Bloodwych from EAB.
+ClassicWB LITE Package contains ClassicWB LITE v28 created by Bloodwych from EAB.
 
 With permission from Bloodwych it's been converted to a package for HstWB Installer.
+
+Original version of ClassicWB LITE can be downloaded from http://classicwb.abime.net/.
+
+## Installation
+
+Download latest release [here](../../releases) and copy it to HstWB Installer "packages" directory, which typically is "c:\Program Files (x86)\HstWB Installer\Packages".
+
+## Modifications
 
 ClassicWB is installed from a zip file containing all files from ClassicWB System.hdf.
 
@@ -16,7 +24,3 @@ The install script for HstWB Installer is based on S/Startup-Sequence from Class
 - Removed all "press enter to continue" expect last one used after installation complete message is shown.
 - Removed and reduced waits.
 - Adjusted text spacing.
-
-## Installation
-
-Download latest release [here](../../releases) and copy it to HstWB Installer "packages" directory, which typically is "c:\Program Files (x86)\HstWB Installer\Packages".
