@@ -162,17 +162,14 @@ $guideFileName = Split-Path $guideFile -Leaf
 
 
 # convert images
-Write-Host "Converting images..." -ForegroundColor Yellow
 ConvertImages $markdownFile $guideDir
 
 
 # build guide lines from markdown file
-Write-Host "Building guide..." -ForegroundColor Yellow
 $guideLines = BuildGuideLines $markdownFile $guideFileName
 
 
 # write guide lines to guide file
-Write-Host "Writing guide..." -ForegroundColor Yellow
 WriteAmigaTextLines $guideFile $guideLines
 
 
