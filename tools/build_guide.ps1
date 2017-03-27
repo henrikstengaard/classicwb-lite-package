@@ -55,7 +55,7 @@ function ConvertImages($markdownFile, $outputDir)
         $imageFile = Resolve-Path $imageFile
 
         # image magick
-	    $imageMagickConvertArgs = """$imageFile"" -resize 620x194! -filter Point -depth 8 -colors 255 ""$tempFile"""
+	    $imageMagickConvertArgs = """$imageFile"" -resize 610x190! -filter Point -depth 8 -colors 255 ""$tempFile"""
         Write-Host $imageMagickConvertArgs
         $imageMagickConvertProcess = Start-Process -FilePath $imageMagickConvertPath -ArgumentList $imageMagickConvertArgs -Wait -NoNewWindow -PassThru
         if ($imageMagickConvertProcess.ExitCode -ne 0)
