@@ -12,7 +12,9 @@ Original version of ClassicWB LITE can be downloaded from http://classicwb.abime
 
 ## Installation
 
-Download latest release [here](../../releases) and copy it to HstWB Installer "packages" directory, which typically is "c:\Program Files (x86)\HstWB Installer\Packages".
+Download latest release from https://github.com/henrikstengaard/classicwb-lite-package/releases and copy it to HstWB Installer "packages" directory, which typically is "c:\Program Files (x86)\HstWB Installer\Packages".
+
+Installation through HstWB Installer will present dialogs to customize ClassicWB installation.
 
 ## Modifications
 
