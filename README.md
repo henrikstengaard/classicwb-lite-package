@@ -14,7 +14,16 @@ Original version of ClassicWB LITE can be downloaded from http://classicwb.abime
 
 Download latest release from https://github.com/henrikstengaard/classicwb-lite-package/releases and copy it to HstWB Installer "packages" directory, which typically is "c:\Program Files (x86)\HstWB Installer\Packages".
 
-Installation through HstWB Installer will present dialogs to customize ClassicWB installation.
+Installation through HstWB Installer will install and configure ClassicWB LITE package using defined assigns.
+During installation dialogs are presented to customize ClassicWB installation.
+
+## Assigns
+
+Installation of ClassicWB LITE package requires and uses following assign and default value:
+
+- SYSTEMDIR: = DH0:
+
+ClassicWB LITE files will be installed and configured in SYSTEMDIR: assign, which must be set to harddrive containing Workbench.
 
 ## Modifications
 
