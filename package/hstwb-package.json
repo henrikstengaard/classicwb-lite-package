@@ -1,0 +1,11 @@
+{
+    "name": "ClassicWB LITE",
+    "version": "28.0.1",
+    "priority": 1,
+    "assigns":
+    [
+        {
+            "name": "SYSTEMDIR"
+        }
+    ]
+}
