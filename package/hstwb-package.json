@@ -1,4 +1,9 @@
 {
+    "selectionIds":
+    [
+        "classicwb",
+        "amigaos"
+    ],
     "name": "ClassicWB LITE",
     "version": "28.0.2",
     "priority": 1,
