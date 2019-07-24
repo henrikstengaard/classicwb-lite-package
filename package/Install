@@ -2,10 +2,10 @@
 ; -----------------------------------------
 ;
 ; Author: Henrik Noerfjand Stengaard 
-; Date: 2017-06-09
+; Date: 2019-07-24
 ;
 ; This script extracts and installs ClassicWB LITE v28 created by Bloodwych from EAB. 
-; With permission from Bloodwych it's been converted to a package for HstWB Installer.
+; With permission from Bloodwych it's converted to a package for HstWB Installer.
 ; Original version of ClassicWB LITE can be downloaded from http://classicwb.abime.net/.
 ; The install script is based on S/Startup-Sequence from System.hdf with following changes:
 ; - Removed Workbench installation.
@@ -14,6 +14,13 @@
 ; - Removed all "press enter to continue" expect last one used after installation complete message is shown.
 ; - Removed and reduced waits.
 ; - Adjusted text spacing.
+; - Added support for Amiga OS 3.1.4:
+;   - Reinstalled MUI. 
+;   - Removed black text shadow for Retro and Re-Gen themes. 
+;   - Added LoadModule ROMUPDATE to support Kickstart 3.1 being patched to 3.1.4.
+;   - Added version checking of DEVS:scsi.device, so it only will be loaded if scsi.device in memory/resident is less than v43.45.
+;   - Added install patch Amiga OS 3.1.4.1, if Amiga OS 3.1.4.1 update is installed. 
+
 
 ; Copy readme and screenshots to locale help for ClassicWB LITE
 IF NOT EXISTS SYSTEMDIR:Locale/Help/ClassicWB-LITE
@@ -46,9 +53,51 @@ IF NOT EXISTS SYSTEMDIR:Locale/Help/ClassicWB-LITE/screenshots
 ENDIF
 copy >NIL: PACKAGEDIR:screenshots/#?.iff SYSTEMDIR:Locale/Help/ClassicWB-LITE/screenshots
 
+
+; detect amiga os version
+set amigaosversion ""
+IF EXISTS "SYSTEMDIR:Libs/workbench.library"
+  ; set amiga os version to 3.1.4, if workbench.library file is equal or greater than v45.194
+  Version >NIL: "SYSTEMDIR:Libs/workbench.library" 45 194 FILE
+  IF $RC EQ 0 VAL
+    set amigaosversion "3.1.4"
+  ENDIF
+ELSE
+  ; set amiga os version to 3.1.4, if loaded workbench.library is equal or greater than v45.194
+  Version >NIL: "workbench.library" 45 194
+  IF $RC EQ 0 VAL
+    set amigaosversion "3.1.4"
+  ENDIF
+ENDIF
+
+
 ; Extract classicwb lite v28 zip to systemdir
 echo "Installing ClassicWB LITE..." 
-unzip -qq -o -x PACKAGEDIR:classicwb_lite_v28.zip -d SYSTEMDIR:
+
+IF "$amigaosversion" EQ "3.1.4"
+  ; extract classicwb lite excluding files conflicting with amiga os 3.1.4
+  unzip -qq -o -x PACKAGEDIR:classicwb_lite_v28.zip -d SYSTEMDIR: -x *LoadModule *LoadResource *MakeLink *SetPatch *CDFileSystem *CrossDOSFileSystem *FastFileSystem *DANSK.crossdos *INTL.crossdos *MAC.crossdos *68040.library *asl.library *Icon.Library *lowlevel.library *nonvolatile.library *realtime.library
+
+  ; reinstall mui to fix igame
+  MakePath >NIL: "SYSTEMDIR:Temp/MUI"
+  lha -m1 -q x "PACKAGEDIR:mui38usr.lha" "SYSTEMDIR:Temp/MUI/"
+  Copy >NIL: "SYSTEMDIR:Temp/MUI/MUI/#?" "SYSTEMDIR:System/MUI/" CLONE ALL
+  Delete >NIL: "SYSTEMDIR:Temp/MUI/" ALL
+
+  ; copy startup-sequence for amiga os 3.1.4
+  Copy >NIL: PACKAGEDIR:Startup-Sequence.3.1.4 SYSTEMDIR:S/Startup-Sequence
+
+  ; install patch amiga os 3.1.4.1, if it exists
+  IF EXISTS "SYSTEMDIR:S/Install-Patch-Amiga-OS-3141"
+    Execute "SYSTEMDIR:S/Install-Patch-Amiga-OS-3141" SYS SYSTEMDIR QUIET
+  ENDIF
+ELSE
+  ; extract classicwb lite
+  unzip -qq -o -x PACKAGEDIR:classicwb_lite_v28.zip -d SYSTEMDIR:
+
+  ; copy startup-sequence for amiga os 3.1
+  Copy >NIL: PACKAGEDIR:Startup-Sequence.3.1 SYSTEMDIR:S/Startup-Sequence
+ENDIF
 
 ; Copy scsi device
 IF EXISTS DEVS:scsi.device
@@ -57,10 +106,8 @@ ENDIF
 
 ; Install ClassicWB from S/Startup-Sequence
 ; LITE
-copy SYSTEMDIR:T/Science SYSTEMDIR:S CLONE
+
 delete >NIL: SYSTEMDIR:T/Science
-delete >NIL: SYSTEMDIR:S/startup-sequence
-rename SYSTEMDIR:S/Science SYSTEMDIR:S/Startup-Sequence
 
 IF EXISTS SYSTEMDIR:C/LoadWB.temp
   copy >NIL: SYSTEMDIR:C/LoadWB.temp SYSTEMDIR:C/LoadWB
@@ -238,13 +285,16 @@ EndIF
 
 SYSTEMDIR:C/Requestchoice >ENV:Choice "Choose Theme""Choose:""None""Retro""Re-Gen"
 
+set theme "0"
 IF $Choice EQ "1"
   SKIP NONE
 ENDIF
 IF $Choice EQ "2"
+  set theme "1"
   SKIP RETRO
 ENDIF
 IF $Choice EQ "0"
+  set theme "1"
   SKIP REGEN
 ENDIF
 
@@ -268,6 +318,12 @@ LAB RETRO
   delete >NIL: SYSTEMDIR:Temp/regen.zip
   delete >NIL: SYSTEMDIR:Temp/oldicons.zip
   delete >NIL: SYSTEMDIR:Temp/oldiconsd.zip
+
+  ; patch font prefs, if amiga os version is 3.1.4
+  IF "$amigaosversion" EQ "3.1.4"
+    Copy >NIL: "PACKAGEDIR:font.prefs.theme" "SYSTEMDIR:Prefs/Env-Archive/Sys/font.prefs"
+  ENDIF
+
   wait 1
   SKIP COPPER
 
@@ -285,6 +341,12 @@ LAB REGEN
   delete >NIL: SYSTEMDIR:Temp/regen.zip
   delete >NIL: SYSTEMDIR:Temp/oldicons.zip
   delete >NIL: SYSTEMDIR:Temp/oldiconsd.zip
+
+  ; patch font prefs, if amiga os version is 3.1.4
+  IF "$amigaosversion" EQ "3.1.4"
+    Copy >NIL: "PACKAGEDIR:font.prefs.theme" "SYSTEMDIR:Prefs/Env-Archive/Sys/font.prefs"
+  ENDIF
+
   wait 1
   SKIP COPPER
 
@@ -393,6 +455,14 @@ LAB ENABLE
   echo ""
   delete >NIL: SYSTEMDIR:Temp/Copper_enable
   delete >NIL: SYSTEMDIR:Temp/BorderBlank_enable
+
+  ; patch font prefs, if amiga os version is 3.1.4 and retro or regen theme is installed
+  IF "$amigaosversion" EQ "3.1.4"
+    IF "$theme" EQ "1" VAL
+      Copy >NIL: "PACKAGEDIR:font.prefs.theme" "SYSTEMDIR:Prefs/Env-Archive/Sys/font.prefs"
+    ENDIF
+  ENDIF
+
   wait 1
   SKIP BORDER
 
