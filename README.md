@@ -12,7 +12,7 @@ Original version of ClassicWB LITE can be downloaded from http://classicwb.abime
 
 ## Requirements
 
-ClassicWB LITE package can be installed on any Amiga with Workbench 3.1 and about 41MB free space on a harddrive for installation.
+ClassicWB LITE package can be installed on any Amiga with Amiga OS 3.1 or 3.1.4 and about 41MB free space on a harddrive for installation.
 
 ## Installation
 
@@ -41,10 +41,22 @@ The install script for HstWB Installer is based on S/Startup-Sequence from Class
 - Removed all "press enter to continue" expect last one used after installation complete message is shown.
 - Removed and reduced waits.
 - Adjusted text spacing.
+- Added support for Amiga OS 3.1.4: 
+  - Reinstalled MUI. 
+  - Removed black text shadow for Retro and Re-Gen themes. 
+  - Added LoadModule ROMUPDATE to support Kickstart 3.1 being patched to 3.1.4.
+  - Added version checking of DEVS:scsi.device, so it only will be loaded if scsi.device in memory/resident is less than v43.45.
+  - Added install patch Amiga OS 3.1.4.1, if Amiga OS 3.1.4.1 update is installed. 
 
 ## Screenshots
 
 Screenshots of ClassicWB LITE from http://classicwb.abime.net/classicweb/litepics.htm.
+
+![ClassicWB LITE 3.1.4 1](screenshots/classicwb_lite_3.1.4_1.png?raw=true)
+
+![ClassicWB LITE 3.1.4 2](screenshots/classicwb_lite_3.1.4_2.png?raw=true)
+
+![ClassicWB LITE 3.1.4 3](screenshots/classicwb_lite_3.1.4_3.png?raw=true)
 
 ![ClassicWB LITE 1](screenshots/classicwb_lite1.png?raw=true)
 
