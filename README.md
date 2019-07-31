@@ -58,6 +58,8 @@ Screenshots of ClassicWB LITE from http://classicwb.abime.net/classicweb/litepic
 
 ![ClassicWB LITE 3.1.4 3](screenshots/classicwb_lite_3.1.4_3.png?raw=true)
 
+![ClassicWB LITE 3.1.4 4](screenshots/classicwb_lite_3.1.4_4.png?raw=true)
+
 ![ClassicWB LITE 1](screenshots/classicwb_lite1.png?raw=true)
 
 ![ClassicWB LITE 2](screenshots/classicwb_lite2.png?raw=true)
