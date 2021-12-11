@@ -41,13 +41,15 @@ The install script for HstWB Installer is based on S/Startup-Sequence from Class
 - Removed all "press enter to continue" expect last one used after installation complete message is shown.
 - Removed and reduced waits.
 - Adjusted text spacing.
+- Creates backup of startup sequence as "S:Startup-Sequence.BAK".
+- Creates backup of user startup as "S:User-Startup.BAK". 
+- Creates backup of original ClassicWB LITE startup sequence as "S:Startup-Sequence.CWB".
+- Creates backup of original ClassicWB LITE user startup as "S:User-Startup.CWB". 
+- Patch startup sequence and user startup with ClassicWB LITE changes for best Amiga OS compatibility with existing and future versions.
 - Added support for Amiga OS 3.2 and 3.1.4:
-  - Reinstalled MUI. 
+  - Disabled PatchRam, MinStack, TagLiFE, PatchWB, StackAttack, RamSnap, HDEnv, SmartWin, Border Blank, Copper, FBlit, ENV.
+  - Reinstalled MUI.
   - Removed black text shadow for Retro and Re-Gen themes. 
-  - Added LoadModule ROMUPDATE to support Kickstart 3.1 being patched to 3.1.4.
-  - Added version checking of DEVS:scsi.device, so it only will be loaded if scsi.device in memory/resident is less than v43.45.
-  - Added install patch Amiga OS 3.1.4.1, if Amiga OS 3.1.4.1 update is installed. 
-  - Disabled Copper, Border Blank, FBlit, StackAttack, ENV.
   - Fix WB13 by always disabling Copper.
 
 ## Screenshots

@@ -1,0 +1,63 @@
+;ClassicWB User-Startup
+;----------------------
+;LITE
+
+IF EXISTS SYS:System/FPalette/FPPrefs
+  SYS:System/FPalette/FPPrefs
+EndIF
+
+IF EXISTS C:AntiClick
+  C:AntiClick
+EndIF
+
+Execute S:Assign-Startup
+
+Assign >NIL: LAUNCH: SYS:System/BMenu/Files
+Assign >NIL: JPEGTMP: SYS:T
+
+If Not Exists RAM:Disk.info
+  C:Copy >NIL: SYS:S/Ram.info RAM:Disk.info
+EndIf
+
+If Exists C:RamSnap
+  Run >NIL: C:RamSnap
+EndIf
+
+;BEGIN MUI
+IF EXISTS SYS:System/MUI
+   Assign >NIL: MUI: SYS:System/MUI
+   IF EXISTS MUI:Libs
+      Assign >NIL: ADD LIBS: MUI:Libs
+   EndIF
+   IF EXISTS MUI:Locale
+      Assign >NIL: ADD LOCALE: MUI:Locale
+   EndIF
+   C:Version >NIL: exec.library 39
+   IF NOT WARN
+      IF EXISTS MUI:Docs
+         IF EXISTS HELP:dummy
+         EndIF
+         Assign >NIL: ADD HELP: MUI:Docs
+      EndIF
+   EndIF
+EndIF
+;END MUI
+
+C:Mount KCON: from DEVS:KingCON-mountlist
+C:Mount KRAW: from DEVS:KingCON-mountlist
+
+IF EXISTS C:NewIcons
+  Run <>NIL: C:NewIcons
+ELSE
+  C:Delete >NIL: ENV:Newicons.prefs
+EndIF
+
+IF EXISTS C:BorderBlank
+  C:BorderBlank
+EndIF
+
+Run >NIL: C:XpkMasterPrefs
+
+IF EXISTS C:StackAttack
+  C:StackAttack AUTO
+EndIF

@@ -2,7 +2,7 @@
 ; -----------------------------------------
 ;
 ; Author: Henrik Noerfjand Stengaard 
-; Date: 2021-08-14
+; Date: 2021-12-10
 ;
 ; This script extracts and installs ClassicWB LITE v28 created by Bloodwych from EAB. 
 ; With permission from Bloodwych it's converted to a package for HstWB Installer.
@@ -14,13 +14,15 @@
 ; - Removed all "press enter to continue" expect last one used after installation complete message is shown.
 ; - Removed and reduced waits.
 ; - Adjusted text spacing.
+; - Creates backup of startup sequence as "S:Startup-Sequence.BAK".
+; - Creates backup of user startup as "S:User-Startup.BAK". 
+; - Creates backup of original ClassicWB LITE startup sequence as "S:Startup-Sequence.CWB".
+; - Creates backup of original ClassicWB LITE user startup as "S:User-Startup.CWB". 
+; - Patch startup sequence and user startup with ClassicWB LITE changes for best Amiga OS compatibility with existing and future versions.
 ; - Added support for Amiga OS 3.2 and 3.1.4:
-;   - Reinstalled MUI. 
+;   - Disabled PatchRam, MinStack, TagLiFE, PatchWB, StackAttack, RamSnap, HDEnv, SmartWin, Border Blank, Copper, FBlit, ENV.
+;   - Reinstalled MUI.
 ;   - Removed black text shadow for Retro and Re-Gen themes. 
-;   - Added LoadModule ROMUPDATE to support Kickstart 3.1 being patched to 3.1.4.
-;   - Added version checking of DEVS:scsi.device, so it only will be loaded if scsi.device in memory/resident is less than v43.45.
-;   - Added install patch Amiga OS 3.1.4.1, if Amiga OS 3.1.4.1 update is installed. 
-;   - Disabled Copper, Border Blank, FBlit, StackAttack, ENV.
 ;   - Fix WB13 by always disabling Copper.
 
 
@@ -87,9 +89,31 @@ ENDIF
 ; Extract classicwb lite v28 zip to systemdir
 echo "Installing ClassicWB LITE..." 
 
+; create backup of startup sequence
+IF EXISTS SYSTEMDIR:S/Startup-Sequence
+  Copy >NIL: SYSTEMDIR:S/Startup-Sequence SYSTEMDIR:S/Startup-Sequence.BAK
+ENDIF
+
+; create backup of user startup
+IF EXISTS SYSTEMDIR:S/User-Startup
+  Copy >NIL: SYSTEMDIR:S/User-Startup SYSTEMDIR:S/User-Startup.BAK
+ENDIF
+
 IF NOT "$amigaosversion" EQ "3.1"
-  ; extract classicwb lite excluding files conflicting with amiga os 3.2 and 3.1.4
+  ; backup amiga os files
+  MakePath >NIL: SYSTEMDIR:Temp/_Backup
+  Copy >NIL: SYSTEMDIR:C SYSTEMDIR:Temp/_Backup/C ALL CLONE
+  Copy >NIL: SYSTEMDIR:Classes SYSTEMDIR:Temp/_Backup/Classes ALL CLONE
+  Copy >NIL: SYSTEMDIR:L SYSTEMDIR:Temp/_Backup/L ALL CLONE
+  Copy >NIL: SYSTEMDIR:Devs SYSTEMDIR:Temp/_Backup/Devs ALL CLONE
+  Copy >NIL: SYSTEMDIR:Libs SYSTEMDIR:Temp/_Backup/Libs ALL CLONE 
+ 
+   ; extract classicwb lite excluding files conflicting with amiga os 3.2 and 3.1.4
   unzip -qq -o -x PACKAGEDIR:classicwb_lite_v28.zip -d SYSTEMDIR: -x *LoadModule *LoadResource *MakeLink *SetPatch *CDFileSystem *CrossDOSFileSystem *FastFileSystem *DANSK.crossdos *INTL.crossdos *MAC.crossdos *68040.library *asl.library *Icon.Library *lowlevel.library *nonvolatile.library *realtime.library
+
+  ; restore amiga os files
+  Copy >NIL: SYSTEMDIR:Temp/_Backup/#? SYSTEMDIR: ALL CLONE
+  Delete >NIL: SYSTEMDIR:Temp/_Backup ALL
 
   ; reinstall mui to fix igame
   MakePath >NIL: "SYSTEMDIR:Temp/MUI"
@@ -97,26 +121,100 @@ IF NOT "$amigaosversion" EQ "3.1"
   Copy >NIL: "SYSTEMDIR:Temp/MUI/MUI/#?" "SYSTEMDIR:System/MUI/" CLONE ALL
   Delete >NIL: "SYSTEMDIR:Temp/MUI/" ALL
 
-  IF "$amigaosversion" EQ "3.2"
-    ; copy startup-sequence for amiga os 3.2
-    Copy >NIL: PACKAGEDIR:Patches/Startup-Sequence.3.2 SYSTEMDIR:S/Startup-Sequence
-  ELSE
-    IF "$amigaosversion" EQ "3.1.4"
-      ; copy startup-sequence for amiga os 3.1.4
-      Copy >NIL: PACKAGEDIR:Patches/Startup-Sequence.3.1.4 SYSTEMDIR:S/Startup-Sequence
-
-      ; install patch amiga os 3.1.4.1, if it exists
-      IF EXISTS "SYSTEMDIR:S/Install-Patch-Amiga-OS-3141"
-        Execute "SYSTEMDIR:S/Install-Patch-Amiga-OS-3141" SYS SYSTEMDIR QUIET
-      ENDIF
-    ENDIF
+  IF EXISTS C:PatchRam
+    Rename >NIL: C:PatchRam C:PatchRam_disabled
   ENDIF
-ELSE
+
+  IF EXISTS C:MinStack
+    Rename >NIL: C:MinStack C:MinStack_disabled
+  ENDIF
+
+  IF EXISTS C:TagLiFE
+    Rename >NIL: C:TagLiFE C:TagLiFE_disabled
+  ENDIF
+
+  IF EXISTS C:PatchWB
+    Rename >NIL: C:PatchWB C:PatchWB_disabled
+  ENDIF
+
+  IF EXISTS C:StackAttack
+    Rename >NIL: C:StackAttack C:StackAttack_disabled
+  ENDIF
+
+  IF EXISTS C:RamSnap
+    Rename >NIL: C:RamSnap C:RamSnap_disabled
+  ENDIF
+Else
   ; extract classicwb lite
   unzip -qq -o -x PACKAGEDIR:classicwb_lite_v28.zip -d SYSTEMDIR:
+EndIf
 
-  ; copy startup-sequence for amiga os 3.1
-  Copy >NIL: PACKAGEDIR:Startup-Sequence.3.1 SYSTEMDIR:S/Startup-Sequence
+; backup classicwb lite startup sequence
+Copy >NIL: SYSTEMDIR:T/Science SYSTEMDIR:S/Startup-Sequence.CWB
+Delete >NIL: SYSTEMDIR:T/Science
+
+; backup classicwb lite user startup
+Copy >NIL: SYSTEMDIR:S/User-Startup SYSTEMDIR:S/User-Startup.CWB
+
+; restore wb startup sequence
+Copy >NIL: SYSTEMDIR:S/Startup-Sequence.BAK SYSTEMDIR:S/Startup-Sequence
+
+; restore wb user startup, if it exists. otherwise create empty user startup
+If Exists SYSTEMDIR:S/User-Startup.BAK
+  Copy >NIL: SYSTEMDIR:S/User-Startup.BAK SYSTEMDIR:S/User-Startup
+Else
+  Echo "" NOLINE >SYSTEMDIR:S/User-Startup
+EndIf
+
+; copy patches to systemdir
+Copy >NIL: PACKAGEDIR:Patches/SystemDir/#? SYSTEMDIR: ALL CLONE
+
+; find set patch in startup sequence
+Search SYSTEMDIR:S/Startup-Sequence "SetPatch" NONUM >T:_setpatch1
+IF $RC EQ 0 VAL
+  ; add boot startup to startup sequence after "SetPatch", if not present 
+  Search >NIL: SYSTEMDIR:S/Startup-Sequence "Execute S:Boot-Startup" quiet
+  IF NOT $RC EQ 0 VAL
+    ; get found set patch text
+    sed "1q;d" T:_setpatch1 >T:_setpatch2
+    set setpatch `type T:_setpatch2`
+
+    rep SYSTEMDIR:S/Startup-Sequence "$setpatch" "If Exists S:Boot-Startup*N  Execute S:Boot-Startup*NEndIf*N$setpatch"
+  ENDIF
+ELSE
+  echo "*e[1mError: Unable to add boot startup,*N'SetPatch'*Nnot found in startup sequence.*NBoot startup can't be installed without this!*e[0m"
+  ask "Press ENTER to continue"
+ENDIF
+Delete >NIL: T:_setpatch#?
+
+; add boot menu startup to startup sequence after "S:Boot-Startup", if not present
+Search >NIL: SYSTEMDIR:S/Startup-Sequence "S:BootMenu-Startup" quiet
+IF NOT $RC EQ 0 VAL
+  rep SYSTEMDIR:S/Startup-Sequence "Execute S:Boot-Startup" "Execute S:Boot-Startup*NEndIf*NIF EXISTS S:BootMenu-Startup*N  Execute S:BootMenu-Startup"
+ENDIF
+
+; find bind drivers in startup sequence
+Search SYSTEMDIR:S/Startup-Sequence "BindDrivers" NONUM >T:_binddrivers1
+IF $RC EQ 0 VAL
+  ; add boot patches startup to startup sequence after "BindDrivers", if not present
+  Search >NIL: SYSTEMDIR:S/Startup-Sequence "S:BootPatches-Startup" quiet
+  IF NOT $RC EQ 0 VAL
+    ; get found binddrivers text
+    sed "1q;d" T:_binddrivers1 >T:_binddrivers2
+    set binddrivers `sed "1q;d" T:_binddrivers2`
+
+    rep SYSTEMDIR:S/Startup-Sequence "$binddrivers" "IF EXISTS S:BootPatches-Startup*N  Execute S:BootPatches-Startup*NEndIf*N$binddrivers"
+  ENDIF
+ELSE
+  echo "*e[1mError: Unable to add boot patches startup,*N'BindDrivers'*Nnot found in startup sequence.*NBoot patches startup can't be installed without this!*e[0m"
+  ask "Press ENTER to continue"
+ENDIF
+Delete >NIL: T:_binddrivers#?
+
+; add workbench patches startup to user startup, if not present
+Search >NIL: SYSTEMDIR:S/User-Startup "Execute S:WorkbenchPatches-Startup" quiet
+IF NOT $RC EQ 0 VAL
+  Type PACKAGEDIR:Patches/Add-WorkbenchPatches >>SYSTEMDIR:S/User-Startup
 ENDIF
 
 ; set harddisk icon
@@ -144,15 +242,9 @@ IF NOT "$harddiskicon" EQ ""
   ENDIF
 ENDIF
 
-; Copy scsi device
-IF EXISTS DEVS:scsi.device
-  COPY >NIL: DEVS:scsi.device SYSTEMDIR:Devs
-ENDIF
 
 ; Install ClassicWB from S/Startup-Sequence
 ; LITE
-
-delete >NIL: SYSTEMDIR:T/Science
 
 IF EXISTS SYSTEMDIR:C/LoadWB.temp
   copy >NIL: SYSTEMDIR:C/LoadWB.temp SYSTEMDIR:C/LoadWB
@@ -186,6 +278,8 @@ LAB OPTIONS
   SYSTEMDIR:System/FixFonts
 
 LAB WB13
+
+wait 1
 
 IF EXISTS SYSTEMDIR:Temp/WB13.zip
   cls
