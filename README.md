@@ -54,7 +54,7 @@ The install script for HstWB Installer is based on S/Startup-Sequence from Class
 
 ## Screenshots
 
-Screenshots of ClassicWB LITE from http://classicwb.abime.net/classicweb/litepics.htm.
+Screenshots of ClassicWB LITE installed with Amiga OS 3.2.
 
 ![ClassicWB LITE 3.2 1](screenshots/classicwb_lite_3.2_1.png?raw=true)
 
@@ -64,6 +64,8 @@ Screenshots of ClassicWB LITE from http://classicwb.abime.net/classicweb/litepic
 
 ![ClassicWB LITE 3.2 4](screenshots/classicwb_lite_3.2_4.png?raw=true)
 
+Screenshots of ClassicWB LITE installed with Amiga OS 3.1.4.
+
 ![ClassicWB LITE 3.1.4 1](screenshots/classicwb_lite_3.1.4_1.png?raw=true)
 
 ![ClassicWB LITE 3.1.4 2](screenshots/classicwb_lite_3.1.4_2.png?raw=true)
@@ -71,6 +73,8 @@ Screenshots of ClassicWB LITE from http://classicwb.abime.net/classicweb/litepic
 ![ClassicWB LITE 3.1.4 3](screenshots/classicwb_lite_3.1.4_3.png?raw=true)
 
 ![ClassicWB LITE 3.1.4 4](screenshots/classicwb_lite_3.1.4_4.png?raw=true)
+
+Screenshots of ClassicWB LITE from http://classicwb.abime.net/classicweb/litepics.htm.
 
 ![ClassicWB LITE 1](screenshots/classicwb_lite1.png?raw=true)
 
